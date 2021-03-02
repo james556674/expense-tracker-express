@@ -1,0 +1,47 @@
+<div class="container mt-4 w-50">
+  <form action="/filter" method="POST">
+    <div class="row">
+      <div class="col-6">
+        總金額
+        <span>{{totalAmount}}</span>
+      </div>
+      <div class="col-6">
+        <div class="d-flex justify-content-end">
+          <div class="filter-option">
+            <select class="custom-select" onchange="this.form.submit()" name="option">
+              <option value="all" selected>全部</option>
+              <option value="home">家居物業</option>
+              <option value="traffic">交通出行</option>
+              <option value="entertainment">休閒娛樂</option>
+              <option value="food">餐飲食品</option>
+              <option value="else">其他</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {{!-- expense items --}}
+  <ul class="list-group">
+    {{#each records}}
+    <li class="list-group-item">
+      <div class="row d-flex justify-content-between">
+        <div class="col-auto mr-auto">
+          {{this.category}}
+          {{this.name}}
+          {{this.date}}
+          {{this.amount}}
+        </div>
+        <div class="col-auto">
+          <a class="btn btn-secondary" href="./records/{{ this._id }}/edit">Edit</a>
+          <form action="./records/{{ this._id }}?_method=DELETE" method="POST" style="display: inline;">
+            <button class="btn btn-danger" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+    </li>
+    {{/each}}
+  </ul>
+
+</div>
