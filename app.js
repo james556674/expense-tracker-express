@@ -1,25 +1,63 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
+const Record = require('./models/record.js')
+const Category = require('./models/category.js')
+const getTotalAmount = require('./config/getTotalAmount.js')
 require('./config/mongoose')
 
 const app = express()
 
 const PORT = 3000
 
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main',
+  helpers: {
+    ifEquals: function (targetItem, iteratedItem, options) {
+      return (targetItem === iteratedItem) ? options.fn(this) : options.inverse(this)
+    }
+  }
+}))
 app.set('view engine', 'handlebars')
 
 
 app.get('/', (req, res) => {
-  const records = [
-    {
-      category: '餐飲',
-      name: '午餐',
-      date: '2020/10/16',
-      amount: 50
-    }
-  ]
-  res.render('index', { totalAmount: 1000, records })
+
+  Category.find()
+    .sort({ _id: 'asc' })
+    .lean()
+    .then(categories => {
+      Record.find()
+        .lean()
+        .then(records => {
+          res.render('index', { totalAmount: getTotalAmount(records), categories, targetCategory: 'all', records })
+        })
+        .catch(error => console.log(error))
+    })
+    .catch(error => console.log(error))
+})
+
+app.get('/filter', (req, res) => {
+  const category = req.query.category
+  console.log(category)
+
+  Category.find()
+    .sort({ _id: 'asc' })
+    .lean()
+    .then(categories => {
+      if (category === 'all') {
+        Record.find()
+          .lean()
+          .then(records => {
+            res.render('index', { totalAmount: getTotalAmount(records), categories, targetCategory: category, records })
+          })
+      } else {
+        Record.find({ categoryValue: category })
+          .lean()
+          .then(records => {
+            res.render('index', { totalAmount: getTotalAmount(records), categories, targetCategory: category, records })
+          })
+      }
+    })
 })
 
 app.listen(PORT, () => {
