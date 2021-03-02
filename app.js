@@ -33,6 +33,9 @@ app.get('/', (req, res) => {
       Record.find()
         .lean()
         .then(records => {
+          records.forEach(record => {
+            record.date = record.date.toISOString().slice(0, 10)
+          })
           res.render('index', { totalAmount: getTotalAmount(records), categories, targetCategory: 'all', records })
         })
         .catch(error => console.log(error))
@@ -52,12 +55,18 @@ app.get('/filter', (req, res) => {
         Record.find()
           .lean()
           .then(records => {
+            records.forEach(record => {
+              record.date = record.date.toISOString().slice(0, 10)
+            })
             res.render('index', { totalAmount: getTotalAmount(records), categories, targetCategory: category, records })
           })
       } else {
         Record.find({ categoryValue: category })
           .lean()
           .then(records => {
+            records.forEach(record => {
+              record.date = record.date.toISOString().slice(0, 10)
+            })
             res.render('index', { totalAmount: getTotalAmount(records), categories, targetCategory: category, records })
           })
       }
