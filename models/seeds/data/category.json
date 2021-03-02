@@ -1,0 +1,32 @@
+[
+  {
+    "title": "全部",
+    "value": "all",
+    "icon": "<i></i>"
+  },
+  {
+    "title": "家居物業",
+    "value": "home",
+    "icon": "<i class='fas fa-home'></i>"
+  },
+  {
+    "title": "交通出行",
+    "value": "traffic",
+    "icon": "<i class='fas fa-shuttle-van'></i>"
+  },
+  {
+    "title": "休閒娛樂",
+    "value": "entertainment",
+    "icon": "<i class='fas fa-grin-beam'></i>"
+  },
+  {
+    "title": "餐飲食品",
+    "value": "food",
+    "icon": "<i class='fas fa-utensils'></i>"
+  },
+  {
+    "title": "其他",
+    "value": "else",
+    "icon": "<i class='fas fa-pen'></i>"
+  }
+]
