@@ -3,11 +3,13 @@ const exphbs = require('express-handlebars')
 const Record = require('./models/record.js')
 const Category = require('./models/category.js')
 const getTotalAmount = require('./config/getTotalAmount.js')
+const bodyParser = require('body-parser')
 require('./config/mongoose')
 
 const app = express()
-
 const PORT = 3000
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.engine('handlebars', exphbs({
   defaultLayout: 'main',
@@ -58,6 +60,35 @@ app.get('/filter', (req, res) => {
           })
       }
     })
+})
+
+app.get('/records/new', (req, res) => {
+  Category.find()
+    .lean()
+    .sort({ _id: 'asc' })
+    .then(categories => {
+      // remove 'all' option
+      categories.shift()
+      res.render('new', { categories: categories.map(category => category.title) })
+    })
+})
+
+app.post('/records', (req, res) => {
+  const { name, date, category, amount } = req.body
+
+  Category.findOne({ title: category })
+    .then(recordCategory => {
+      return Record.create({
+        categoryValue: recordCategory.value,
+        categoryIcon: recordCategory.icon,
+        name,
+        date,
+        amount
+      })
+    })
+    .then(() => res.redirect('/'))
+    .catch(err => console.error(err))
+
 })
 
 app.listen(PORT, () => {
