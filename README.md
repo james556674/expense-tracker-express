@@ -2,7 +2,7 @@
 一個簡易的記帳系統(持續改進中)
 
 ### Main Page
-![]()
+![](https://github.com/james556674/expense-tracker-express/blob/master/project_picture.PNG)
 
 ### Features
 使用者能夠
